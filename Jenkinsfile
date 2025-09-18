@@ -8,17 +8,11 @@ pipeline {
     }
 
     stages {
-        stage('Checkout Code') {
-            steps {
-                git branch: 'main',
-                    url: 'git@github.com:EshaAshfaq-ITstudent/welcomeDevops.git'
-            }
-        }
-
+       
         stage('Deploy to Apache') {
             steps {
                 sh """
-                    sudo cp ${WORKSPACE}/welcome.html ${DEPLOY_PATH}/
+                    rsync -av --exclude ".git/" --exclude "Jenkinsfile" ${WORKSPACE}/* ${USERNAME}@${SERVER}:${DEPLOY_PATH}/
                     sudo systemctl restart apache2
                 """
             }
